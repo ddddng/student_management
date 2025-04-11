@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}科目管理{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-7"> {# Wider column for the list #}
+         <h2 class="animate-fadeInUp"><i class="bi bi-book-half me-2"></i>科目列表</h2>
+         {% if subjects %}
+         {# 添加 animate-fadeInUp 到列表容器 #}
+         <div class="list-group shadow-sm mb-4 animate-fadeInUp">
+            {% for subject in subjects %}
+            {# 添加 animate-fadeInUp 到列表项，并应用延时 #}
+            <div class="list-group-item d-flex justify-content-between align-items-center flex-wrap gap-2 animate-fadeInUp" style="animation-delay: {{ loop.index0 * 0.05 }}s;">
+                <form action="{{ url_for('edit_subject', subject_id=subject.id) }}" method="post" class="d-inline-flex align-items-center flex-grow-1 me-2 edit-subject-form">
+                     <input type="text" class="form-control form-control-sm me-2 flex-grow-1" name="name" value="{{ subject.name }}" required aria-label="编辑科目 {{ subject.name }}">
+                     {# 保存按钮 - 基础动画 #}
+                     <button type="submit" class="btn btn-sm btn-outline-primary me-1" title="保存更改">
+                        <i class="bi bi-save"></i>
+                    </button>
+                </form>
+                {# 删除按钮 - 基础动画 #}
+                <form action="{{ url_for('delete_subject', subject_id=subject.id) }}" method="post" onsubmit="return confirm('确定要删除科目 \'{{ subject.name|escape }}\' 吗？这将删除所有关联的学生成绩！');" style="display: inline;">
+                    <button type="submit" class="btn btn-sm btn-outline-danger" title="删除科目">
+                        <i class="bi bi-trash3"></i>
+                    </button>
+                </form>
+            </div>
+            {% endfor %}
+         </div>
+         {% else %}
+         <div class="alert alert-info animate-fadeIn"><i class="bi bi-info-circle me-2"></i>还没有添加任何科目。</div>
+         {% endif %}
+    </div>
+    <div class="col-md-5"> {# Narrower column for adding #}
+        <h4 class="animate-fadeInUp" style="animation-delay: 0.1s;"><i class="bi bi-plus-circle-fill me-1"></i> 添加新科目</h4>
+         {# 添加 animate-fadeInUp 到卡片 #}
+        <div class="card shadow-sm form-card animate-fadeInUp" style="animation-delay: 0.15s;">
+            <div class="card-body">
+                 <form method="post" action="{{ url_for('add_subject') }}" class="input-group">
+                    <input type="text" class="form-control" placeholder="输入新科目名称..." name="name" required aria-label="新科目名称">
+                    {# 添加科目按钮 - 使用 btn-pulse-grow 动画 #}
+                    <button class="btn btn-primary btn-pulse-grow" type="submit">
+                        <i class="bi bi-plus-lg me-1"></i> 添加科目
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts_extra %}
+{# JS for edit subject form feedback (no changes) #}
+<script>
+document.querySelectorAll('.edit-subject-form input[type="text"]').forEach(input => {
+    const originalValue = input.value;
+    const saveButton = input.closest('form').querySelector('button[type="submit"]');
+    const originalClasses = Array.from(saveButton.classList);
+    input.addEventListener('input', function() {
+        if (input.value.trim() !== originalValue) { saveButton.className = 'btn btn-sm btn-primary text-white me-1'; }
+        else { saveButton.className = originalClasses.join(' '); }
+    });
+});
+</script>
+{% endblock %}

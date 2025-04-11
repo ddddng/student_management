@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}导入学生数据 - 学生管理系统{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-7">
+        <div class="card shadow-sm form-card">
+             <div class="card-header bg-primary text-white">
+                 <h2 class="mb-0"><i class="bi bi-upload me-2"></i>导入学生数据 (CSV)</h2>
+            </div>
+            <div class="card-body p-4">
+                <div class="alert alert-info" role="alert">
+                    <h5 class="alert-heading"><i class="bi bi-info-circle-fill me-1"></i>导入说明</h5>
+                    <p>请上传 CSV 格式的文件。文件编码建议使用 **UTF-8** 或 **GBK**。</p>
+                    <p>CSV 文件必须包含表头，**前两列必须是 "姓名" 和 "班级"**。</p>
+                    <p>从第三列开始，表头应为系统中已存在的 **科目名称**。系统将根据科目名称匹配并导入相应的分数。</p>
+                    <p>如果 CSV 中的科目名称在系统中不存在，该列的分数将被忽略。</p>
+                    <p>示例表头：<code>姓名,班级,语文,数学,英语</code></p>
+                    <hr>
+                    <p class="mb-0">导入过程会添加新的学生记录。如果需要更新现有学生，请先导出数据，在 CSV 文件中修改后，删除系统中对应学生，再导入修改后的文件。（或等待未来可能的更新功能）</p>
+                </div>
+
+                <form method="post" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label for="file" class="form-label">选择 CSV 文件</label>
+                        <input class="form-control" type="file" id="file" name="file" accept=".csv" required>
+                    </div>
+                     <div class="d-flex justify-content-end gap-2 mt-4">
+                         <a href="{{ url_for('student_list') }}" class="btn btn-secondary"><i class="bi bi-x-circle me-1"></i> 取消</a>
+                         <button type="submit" class="btn btn-primary btn-submit-animation">
+                             <i class="bi bi-cloud-arrow-up-fill me-1"></i> 开始导入
+                         </button>
+                     </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,5 @@
+app:
+  secret_key: 
+  debug: 
+database:
+  url: 

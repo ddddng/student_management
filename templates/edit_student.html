@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {% if student %}编辑学生信息 - {{ student.name }}{% else %}添加新学生{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-7">
+        {# 添加 animate-fadeInUp 到卡片 #}
+        <div class="card shadow-sm form-card animate-fadeInUp">
+             <div class="card-header bg-primary text-white">
+                {% if student %}
+                    <h2 class="mb-0 card-title"><i class="bi bi-pencil-square me-2"></i>编辑学生信息</h2>
+                {% else %}
+                    <h2 class="mb-0 card-title"><i class="bi bi-person-plus-fill me-2"></i>添加新学生</h2>
+                {% endif %}
+            </div>
+            <div class="card-body p-4">
+                 {% set display_name = student_data.name if student_data is defined else (student.name if student else '') %}
+                 {% set display_class_name = student_data.class_name if student_data is defined else (student.class_name if student else '') %}
+                 {% set scores_to_display = student_data.scores if student_data is defined else (current_scores if current_scores is defined else {}) %}
+
+                <form method="post">
+                    {% if student %}
+                    <div class="mb-3">
+                        <label class="form-label">学生ID:</label>
+                        <input type="text" class="form-control" value="{{ student.id }}" readonly disabled>
+                    </div>
+                    {% endif %}
+                    <div class="mb-3">
+                        <label for="name" class="form-label">姓名 <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="name" name="name" value="{{ display_name }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="class_name" class="form-label">班级 <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="class_name" name="class_name" value="{{ display_class_name }}" required>
+                    </div>
+
+                    <h5 class="mt-4 mb-3 border-top pt-3">科目成绩</h5>
+                    {% if subjects %}
+                        <div class="row g-3">
+                        {% for subject in subjects %}
+                            <div class="col-md-6">
+                                <label for="score_{{ subject.id }}" class="form-label">{{ subject.name }}</label>
+                                {% set score_key_form = 'score_' ~ subject.id %}
+                                {% set score_key_direct = subject.id %}
+                                {% set score_value = scores_to_display.get(score_key_form) if student_data is defined and scores_to_display.get(score_key_form) is not none
+                                                    else (scores_to_display.get(score_key_direct) if current_scores is defined and scores_to_display.get(score_key_direct) is not none
+                                                    else '') %}
+                                <input type="number" step="0.1" min="0" class="form-control" id="score_{{ subject.id }}" name="score_{{ subject.id }}" value="{{ score_value }}" placeholder="输入分数 (可选)">
+                            </div>
+                        {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-muted">系统中还没有添加任何科目。请先在 <a href="{{ url_for('subject_list') }}">科目管理</a> 页面添加科目。</p>
+                    {% endif %}
+
+                    <div class="mt-4 d-flex justify-content-end gap-2 border-top pt-3">
+                         {# 取消按钮 - 基础动画 #}
+                         <a href="{{ url_for('student_list') }}" class="btn btn-secondary"><i class="bi bi-x-circle me-1"></i> 取消</a>
+                         {# 提交按钮 - 添加 btn-pulse-grow 动画 #}
+                         <button type="submit" class="btn btn-primary btn-pulse-grow">
+                             <i class="bi bi-check-circle-fill me-1"></i>
+                             {% if student %}保存更改{% else %}添加学生{% endif %}
+                         </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

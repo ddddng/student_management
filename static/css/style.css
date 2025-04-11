@@ -1,0 +1,132 @@
+/* static/css/style.css */
+
+/* --- General Body & Layout --- */
+body {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+    background-color: #f8f9fa;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+main.container {
+    flex-grow: 1;
+}
+
+/* --- Navbar Styles --- */
+.navbar.sticky-top {
+    position: sticky;
+    top: 0;
+    z-index: 1030;
+    background-color: var(--bs-primary);
+    /* Transition for background color AND text color */
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+    /* Navbar text color is generally controlled by .navbar-dark/.navbar-light */
+}
+
+/* Styles for the navbar WHEN SCROLLED */
+.navbar.sticky-top.navbar-scrolled {
+    background-color: transparent !important; /* Transparent background */
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px) !important; /* Keep blur */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* Optional shadow */
+}
+
+/* --- 修改开始：设置滚动时导航栏文本颜色为蓝色 --- */
+
+/* Target the brand link */
+.navbar.sticky-top.navbar-scrolled .navbar-brand {
+    color: var(--bs-primary) !important; /* Change text color to primary blue */
+    /* Optional: Add a subtle shadow for better separation if needed */
+    /* text-shadow: 0 0 5px rgba(255, 255, 255, 0.7); */
+}
+
+/* Target the main navigation links */
+.navbar.sticky-top.navbar-scrolled .navbar-nav .nav-link {
+    color: var(--bs-primary) !important; /* Change text color to primary blue */
+    /* Adjust active link color if necessary */
+}
+/* Ensure active link is also blue */
+.navbar.sticky-top.navbar-scrolled .navbar-nav .nav-link.active {
+    color: var(--bs-primary) !important;
+    font-weight: 600; /* Make active slightly bolder */
+}
+
+/* Target the dropdown toggle (username) */
+.navbar.sticky-top.navbar-scrolled .dropdown-toggle {
+    color: var(--bs-primary) !important; /* Change text color to primary blue */
+}
+
+/* Target the hamburger menu icon */
+.navbar.sticky-top.navbar-scrolled .navbar-toggler {
+     /* Change the border color if needed */
+     /* border-color: rgba(var(--bs-primary-rgb), 0.7); */
+}
+.navbar.sticky-top.navbar-scrolled .navbar-toggler-icon {
+    /* The default Bootstrap toggler icon uses SVG with background-image.
+       Changing its color reliably might require replacing the SVG or using filter.
+       Using filter to approximate the primary color: */
+    filter: none; /* Reset potential dark mode filters */
+    /* Approximate blue - find HSL/sepia/etc. values for your blue or use an online generator */
+    /* This is a generic blue approximation, adjust values for accuracy */
+    filter: invert(38%) sepia(98%) saturate(2157%) hue-rotate(206deg) brightness(100%) contrast(97%);
+}
+/* --- 修改结束 --- */
+
+
+/* --- Keyframe Animations --- */
+/* ... (fadeInUp, fadeIn, pulse, grow, shrinkWidth as before) ... */
+@keyframes fadeInUp { from { opacity: 0; transform: translate3d(0, 30px, 0); } to { opacity: 1; transform: translate3d(0, 0, 0); } }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes shrinkWidth { from { width: 100%; } to { width: 0%; } }
+@keyframes pulse { 0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0, 123, 255, 0.5); } 70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(0, 123, 255, 0); } 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0, 123, 255, 0); } }
+@keyframes grow { 0% { transform: scale(1); } 50% { transform: scale(1.08); } 100% { transform: scale(1); } }
+
+/* --- Animation Utility Classes --- */
+/* ... (animate-fadeInUp, animate-fadeIn as before) ... */
+.animate-fadeInUp { animation-name: fadeInUp; animation-duration: 0.5s; animation-fill-mode: both; animation-timing-function: ease-out; }
+.animate-fadeIn { animation-name: fadeIn; animation-duration: 0.7s; animation-fill-mode: both; animation-timing-function: ease-in; }
+.list-group-item.animate-fadeInUp, .student-table tbody tr.animate-fadeInUp {}
+
+/* --- Button Transitions & Animations --- */
+/* ... (btn, btn:hover, btn-pulse-grow as before) ... */
+.btn { transition: all 0.2s ease-in-out; transform: none; }
+.btn:hover:not(.btn-pulse-grow) { filter: brightness(95%); transform: translateY(-1px); box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+.btn-pulse-grow { box-shadow: 0 0 0 0 rgba(0, 123, 255, 0.7); }
+.btn-pulse-grow:hover { animation: pulse 1.5s infinite, grow 0.3s ease-out forwards; filter: brightness(105%); transform: scale(1.05); }
+
+/* --- Card Styles --- */
+/* ... (form-card, search-sort-card, card-header, card-title, animations as before) ... */
+.form-card, .search-sort-card { border: none; border-radius: 0.375rem; }
+.card-header {} .card-title { font-size: 1.15rem; }
+.form-card.animate-fadeInUp, .search-sort-card.animate-fadeIn {}
+
+/* --- Table Styles --- */
+/* ... (table, th, td, thead, hover, responsive, actions as before) ... */
+.table { border-collapse: separate; border-spacing: 0; font-size: 0.95rem; }
+.table th, .table td { vertical-align: middle; padding: 0.75rem 0.5rem; }
+.table thead th { border-bottom-width: 2px; font-weight: 500; }
+.table-hover tbody tr:hover { background-color: rgba(0, 0, 0, 0.04); }
+.table-responsive.rounded { border-radius: 0.375rem; overflow: hidden; }
+.student-table .action-buttons { white-space: nowrap; }
+
+/* --- Flash Messages --- */
+/* ... (container, flash-alert, alert-removing, progress-bar, colors as before) ... */
+#flash-message-container { position: sticky; top: 1rem; z-index: 1050; margin-bottom: 1rem; }
+.flash-alert { position: relative; overflow: hidden; border-left: 5px solid; border-radius: 0.25rem; box-shadow: 0 0.25rem 0.5rem rgba(0,0,0,0.1); transition: opacity 0.8s ease-out, max-height 0.6s ease-in, padding-top 0.6s ease-in, padding-bottom 0.6s ease-in, margin-bottom 0.6s ease-in; max-height: 200px; }
+.flash-alert.alert-removing { opacity: 0; max-height: 0; padding-top: 0; padding-bottom: 0; margin-bottom: 0; border-width: 0; }
+.alert-progress-bar { position: absolute; bottom: 0; left: 0; height: 4px; background-color: rgba(0, 0, 0, 0.2); width: 100%; animation-name: shrinkWidth; animation-timing-function: linear; animation-play-state: running; animation-fill-mode: forwards; }
+.flash-alert.alert-success .alert-progress-bar { background-color: rgba(25, 135, 84, 0.4); }
+.flash-alert.alert-danger .alert-progress-bar { background-color: rgba(220, 53, 69, 0.4); }
+.flash-alert.alert-warning .alert-progress-bar { background-color: rgba(255, 193, 7, 0.5); }
+.flash-alert.alert-info .alert-progress-bar { background-color: rgba(13, 202, 240, 0.4); }
+.alert-success { border-left-color: var(--bs-success-border-subtle); }
+.alert-danger { border-left-color: var(--bs-danger-border-subtle); }
+.alert-warning { border-left-color: var(--bs-warning-border-subtle); }
+.alert-info { border-left-color: var(--bs-info-border-subtle); }
+
+/* --- Responsive Adjustments --- */
+/* ... (media query as before) ... */
+@media (max-width: 767.98px) { .search-sort-card .row > div { margin-bottom: 1rem; } .search-sort-card .row > div:last-child { margin-bottom: 0; } .table { font-size: 0.85rem; } .table th, .table td { padding: 0.5rem 0.3rem; } }
